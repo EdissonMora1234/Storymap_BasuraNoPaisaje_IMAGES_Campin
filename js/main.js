@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Agregar capa base de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
+        maxZoom: 21
     }).addTo(map);
 
     // Configuración de las capas WMS
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             url: 'https://geoserver.scrd.gov.co/geoserver/Investigacion_Cultured_Maps/wms',
             layerName: 'Investigacion_Cultured_Maps:Localidad_Storymap_RolMujer',
-            displayName: 'Localidad Rol Mujer'
+            displayName: 'Localidad'
         },
         {
             url: 'https://geoserver.scrd.gov.co/geoserver/Investigacion_Cultured_Maps/wms',
@@ -41,8 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             layers: wmsLayer.layerName,
             format: 'image/png',
             transparent: true,
-            maxZoom: 19, // Configurar el nivel de zoom máximo
-            minZoom: 0
+            maxZoom: 21
         });
 
         // Añadir la capa al objeto de overlays con su nombre visible
