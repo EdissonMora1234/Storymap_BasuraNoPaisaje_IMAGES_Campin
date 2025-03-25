@@ -142,4 +142,45 @@ document.addEventListener('DOMContentLoaded', function() {
         changeMapView(lat, lng, zoom);
         indexSlide.scrollIntoView({behavior: 'smooth'});
     });
+
+    // función para despliegue de pop ups
+    map.on('click', function (e) {
+        // Coordenadas del clic
+        var latlng = e.latlng;
+        var bbox = map.getBounds().toBBoxString();
+        var size = map.getSize();
+    
+        // Recorremos las capas activas del mapa
+        Object.keys(overlays).forEach(function (displayName) {
+            var layer = overlays[displayName];
+    
+            if (map.hasLayer(layer)) {
+                var wmsParams = layer.wmsParams;
+    
+                var url = `${layer._url}?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&LAYERS=${wmsParams.layers}` +
+                          `&QUERY_LAYERS=${wmsParams.layers}&BBOX=${bbox}&FEATURE_COUNT=5&HEIGHT=${size.y}&WIDTH=${size.x}` +
+                          `&INFO_FORMAT=application/json&SRS=EPSG:4326&X=${Math.floor(map.layerPointToContainerPoint(e.layerPoint).x)}` +
+                          `&Y=${Math.floor(map.layerPointToContainerPoint(e.layerPoint).y)}`;
+    
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.features && data.features.length > 0) {
+                            var props = data.features[0].properties;
+                            var content = `<b>${displayName}</b><br/>`;
+                            for (var key in props) {
+                                content += `<b>${key}:</b> ${props[key]}<br/>`;
+                            }
+                            L.popup()
+                                .setLatLng(latlng)
+                                .setContent(content)
+                                .openOn(map);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error en GetFeatureInfo:', err);
+                    });
+            }
+        });
+    });
 });
