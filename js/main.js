@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar el mapa centrado en las coordenadas de la primera diapositiva
     var map = L.map('map').setView([4.647455, -74.075478], 17);
 
-    // Agregar capa base de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        subdomains: 'abcd',
         maxZoom: 21
     }).addTo(map);
 
